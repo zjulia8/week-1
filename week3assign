@@ -1,1 +1,84 @@
+#BMI week 3 
+def calculate_bmi(weight_pounds, height_feet, height_inches):
+    """
+    Calculates BMI using the formula: BMI = (weight in pounds / (height in inches)^2) * 703
+    """
+    total_height_inches = (height_feet * 12) + height_inches
+    bmi = (weight_pounds / (total_height_inches ** 2)) * 703
+    return bmi
 
+
+def get_bmi_category(bmi):
+    """
+    Determines the BMI category based on the BMI value.
+    """
+    if bmi < 18.5:
+        return "Underweight"
+    elif 18.5 <= bmi < 24.9:
+        return "Normal weight"
+    elif 25 <= bmi < 29.9:
+        return "Overweight"
+    else:
+        return "Obese"
+
+
+def display_bmi_legend():
+    """
+    Displays BMI category ranges based on WHO recommendations.
+    """
+    print("\nBMI Category Ranges (Source: World Health Organization):")
+    print(" Underweight: BMI < 18.5")
+    print(" Normal weight: 18.5 <= BMI < 24.9")
+    print(" Overweight: 25 <= BMI < 29.9")
+    print(" Obese: BMI >= 30")
+
+
+def get_valid_input(prompt, value_type, min_value, max_value=None):  #1 Data Type Validation
+    """
+    #1 Data type validation + Range validation + Consistency validation
+    Ensures input is of correct type and within an acceptable range.
+    """
+    while True:
+        try:
+            user_input = value_type(input(prompt))
+            if user_input < min_value:  #1 Range validation
+                raise ValueError(f"Value must be at least {min_value}.")
+            if max_value is not None and user_input > max_value:  # Consistency validation
+                raise ValueError(f"Value must not exceed {max_value}.")
+            return user_input
+        except ValueError as e:
+            print(f"Invalid input: {e}. Please try again.")  #2 Exception handling
+
+
+def main():
+    """
+    Main function to handle user input, exception handling, and display results.
+    """
+    print("Welcome to the BMI Calculator!")
+    
+    # Get user input with validation
+    weight_pounds = get_valid_input("Enter your weight in pounds: ", float, 1, 1000)  #1 Data type validation and Consistency validation
+    height_feet = get_valid_input("Enter your height (feet): ", int, 1, 8)
+    height_inches = get_valid_input("Enter your height (inches): ", int, 0, 11)
+    
+    #3 Nested if statement
+    if height_feet > 7:
+        if height_inches > 0:
+            print("Wow! You're exceptionally tall!")
+    elif height_feet < 4:
+        print("You are on the shorter side!")
+    
+    # Calculate BMI
+    bmi = calculate_bmi(weight_pounds, height_feet, height_inches)
+    bmi_category = get_bmi_category(bmi)
+    
+    # Display results
+    print(f"\nYour BMI is: {bmi:.1f}")
+    print(f"You are classified as: {bmi_category}")
+    
+    # Display BMI legend
+    display_bmi_legend()
+
+
+if __name__ == "__main__":
+    main()
